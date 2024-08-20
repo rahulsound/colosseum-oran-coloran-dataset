@@ -10,8 +10,8 @@ run = 'rome_static_medium'
 sched = 'sched0'
 tr = 'tr0'
 exp = 'exp1'
-bs = 'bs1'
-csv = 'bs1'
+bs = 'bs2'
+csv = 'bs2'
 
 file = run + os.path.sep + sched + os.path.sep + tr + os.path.sep + exp + os.path.sep + bs + os.path.sep + csv + '.csv'
 st.write(file)
