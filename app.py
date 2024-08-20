@@ -20,6 +20,6 @@ df = pd.read_csv(file)
 st.write(df.head())
 st.divider()
 
-#pr = ProfileReport(df, title="Profiling Report")
-#st_profile_report(pr)
+pr = ProfileReport(df, title="Profiling Report")
+st_profile_report(pr)
 
