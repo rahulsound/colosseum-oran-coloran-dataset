@@ -20,6 +20,7 @@ df = pd.read_csv(file)
 st.write(df.head())
 st.divider()
 
+st.write('Running Profiler:')
 pr = ProfileReport(df, title="Profiling Report")
 st_profile_report(pr)
 
