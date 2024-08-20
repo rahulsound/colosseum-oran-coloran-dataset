@@ -21,6 +21,7 @@ st.write(df.head())
 st.divider()
 
 st.write('Running Profiler:')
+st.write(df.describe())
 pr = ProfileReport(df, title="Profiling Report")
 st_profile_report(pr)
 
