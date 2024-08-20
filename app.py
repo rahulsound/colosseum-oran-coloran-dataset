@@ -8,11 +8,12 @@ from streamlit_pandas_profiling import st_profile_report
 st.header('EDA App:')
 run = 'rome_static_medium'
 sched = 'sched0'
-tr = 'tr0'
+tr = 'tr22'
 exp = 'exp1'
 bs = 'bs1'
+csv = 'bs1'
 
-file = run + os.path.sep + sched + os.path.sep + tr + os.path.sep + exp + os.path.sep + bs + '.csv'
+file = run + os.path.sep + sched + os.path.sep + tr + os.path.sep + exp + os.path.sep + bs + os.path.sep + csv + '.csv'
 st.write(file)
 df = pd.read_csv(file)
 
