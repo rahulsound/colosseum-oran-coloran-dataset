@@ -138,12 +138,16 @@ elif select_option == 'Summaries':
     bs_list = natsorted(os.listdir())
     os.chdir(root_dir)
 
-
     if os.path.isfile('bs_combo_df.csv'):
-         if 'bs_summary' not in st.session_state:
+        if 'bs_summary' not in st.session_state:
             st.session_state['bs_summary'] = True
             st.session_state['bs_combo_df']  = pd.read_csv('bs_combo_df.csv')
             st.session_state['bs_summary_redo'] = False
+    else: # Complete Init
+        st.session_state['bs_summary'] = False
+        st.session_state['bs_combo_df']  = None
+        st.session_state['bs_summary_redo'] = False        
+    
     sample_pct = 0.1 #Default
     sample_pct = st.sidebar.select_slider('Select % to sample', [0.05, 0.1, 1, 25, 50, 100])
     bs_summary = st.checkbox('Prepare summaries of all base stations?')
