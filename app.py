@@ -153,6 +153,7 @@ elif select_option == 'Summaries':
                     df_temp['exp'] = e
                     df_temp['training'] = t
                     df_temp['sched'] = s
+                    st.write('Adding file: {} {} {} {} ', s, t, e, b)
                     bs_combo_df = pd.concat([bs_combo_df, df_temp])
     bs_combo_df.to_csv('bs_combo_df.csv')
 
