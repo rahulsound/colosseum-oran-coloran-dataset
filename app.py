@@ -141,19 +141,18 @@ elif select_option == 'Summaries':
     sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
     for s in sched_list:
         tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
-        for t in tr_list:
+        for t in tr_list[0:1]:
             exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
-            for e in exp_list:
+            for e in exp_list[0:1]:
                 bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
-                for b in bs_list:
+                for b in bs_list[0:1]:
                     file_name = b.split(sep)[-1]
                     df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
                     sep = os.path.sep
-                    df_temp['base_station'] = b
-                    df_temp['exp'] = e
-                    df_temp['training'] = t
-                    df_temp['sched'] = s
-                    st.write('Adding file: {} {} {} {} ', s, t, e, b)
+                    df_temp['base_station'] = b.split(sep)[-1]
+                    df_temp['exp'] = e.split(sep)[-1]
+                    df_temp['training'] = t.split(sep)[-1]
+                    df_temp['sched'] = s.split(sep)[-1]
                     bs_combo_df = pd.concat([bs_combo_df, df_temp])
     bs_combo_df.to_csv('bs_combo_df.csv')
 
