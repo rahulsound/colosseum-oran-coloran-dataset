@@ -48,69 +48,117 @@ This work was partially supported by the U.S. National Science Foundation under 
       
 
 ###################
-root_dir = os.getcwd()
-st.header('EDA App for exploring ColORAN Dataset:')
-run = 'rome_static_medium'
-os.chdir(run)
-sched_list = natsorted(os.listdir())
-os.chdir(sched_list[1])
-train_list = natsorted(os.listdir())
-os.chdir(train_list[1])
-exp_list = natsorted(os.listdir())
-os.chdir(exp_list[1])
-bs_list = natsorted(os.listdir())
 
-sched = st.sidebar.radio("Select scheduler:",sched_list, horizontal=True)
-train = st.sidebar.radio("Select Training #:",train_list, horizontal=True)
-exp = st.sidebar.radio("Select Experiment # :",exp_list, horizontal=True)
-bs = st.sidebar.radio("Select Base station #:",bs_list, horizontal=True)
 
-os.chdir(root_dir)
-bsdir = run + os.path.sep + sched + os.path.sep + train + os.path.sep + exp + os.path.sep + bs + os.path.sep 
-bsfile = run + os.path.sep + sched + os.path.sep + train + os.path.sep + exp + os.path.sep + bs + os.path.sep + bs + '.csv'
+select_option = st.sidebar.selectbox('Select option to analyze:',['About','Individual Runs', 'Summaries'])
+if select_option == 'About':
+    st.divider()
+    run_writeup()
+    st.divider()      
+elif select_option == 'Individual Runs':
+    root_dir = os.getcwd()
+    st.write(root_dir)
+    st.header('EDA App for exploring ColORAN Dataset:')
+    run = 'rome_static_medium'
+    os.chdir(run)
+    sched_list = natsorted(os.listdir())
+    os.chdir(sched_list[1])
+    train_list = natsorted(os.listdir())
+    os.chdir(train_list[1])
+    exp_list = natsorted(os.listdir())
+    os.chdir(exp_list[1])
+    bs_list = natsorted(os.listdir())
 
-#Grab the files:
-#BS
+    sched = st.sidebar.radio("Select scheduler:",sched_list, horizontal=True)
+    train = st.sidebar.radio("Select Training #:",train_list, horizontal=True)
+    exp = st.sidebar.radio("Select Experiment # :",exp_list, horizontal=True)
+    bs = st.sidebar.radio("Select Base station #:",bs_list, horizontal=True)
 
-#st.header('Reading files first time')
-df_bs = pd.read_csv(bsfile)
-#All UEs
-all_files = glob.glob(os.path.join(bsdir, "ue*.csv"))
-#df = pd.concat((pd.read_csv(f) for f in all_files), ignore_index=True)
-df_combo_ue = pd.DataFrame()
-#append all files together
-for file in all_files:
-            df_temp = pd.read_csv(file)
-            sep = os.path.sep
-            df_temp['ue_id'] = file.split('.')[0].split(sep)[-1]
-            df_combo_ue = pd.concat([df_combo_ue, df_temp])
+    os.chdir(root_dir)
+    bsdir = run + os.path.sep + sched + os.path.sep + train + os.path.sep + exp + os.path.sep + bs + os.path.sep 
+    bsfile = run + os.path.sep + sched + os.path.sep + train + os.path.sep + exp + os.path.sep + bs + os.path.sep + bs + '.csv'
 
-#Write-up:
-st.divider()
-run_writeup()
-st.divider()
+    #Grab the files:
+    #BS
 
-#Plots:1.
-num_cols = df_combo_ue.columns
-col1, col2, col3 = st.columns(3)
-num_selection1 = 'ul_mcs'
-num_selection2 = 'ul_brate'
-cat_selection  = 'ue_id'
-with col1:
-    num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols)
-with col2:
-    num_selection2 = st.selectbox("Select y axis to plot fig1:", num_cols)     
-with col3:
-    cat_selection = st.selectbox("Select criterion to plot fig1:",num_cols)
-fig = px.scatter(data_frame=df_combo_ue, x=num_selection1, y=num_selection2, color=cat_selection)
-st.plotly_chart(fig) 
+    #st.header('Reading files first time')
+    df_bs = pd.read_csv(bsfile)
+    #All UEs
+    all_files = glob.glob(os.path.join(bsdir, "ue*.csv"))
+    #df = pd.concat((pd.read_csv(f) for f in all_files), ignore_index=True)
+    df_combo_ue = pd.DataFrame()
+    #append all files together
+    for file in all_files:
+                df_temp = pd.read_csv(file)
+                sep = os.path.sep
+                df_temp['ue_id'] = file.split('.')[0].split(sep)[-1]
+                df_combo_ue = pd.concat([df_combo_ue, df_temp])
 
-st.divider()
+    #Plots:1.
+    num_cols = df_combo_ue.columns
+    col1, col2, col3 = st.columns(3)
+    num_selection1 = 'ul_mcs'
+    num_selection2 = 'ul_brate'
+    cat_selection  = 'ue_id'
+    with col1:
+        num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols, index=13)
+    with col2:
+        num_selection2 = st.selectbox("Select y axis to plot fig1:", num_cols, index=15)     
+    with col3:
+        cat_selection = st.selectbox("Select criterion to plot fig1:",num_cols, index=21)
+    fig = px.scatter(data_frame=df_combo_ue, x=num_selection1, y=num_selection2, color=cat_selection)
+    st.plotly_chart(fig) 
 
-profiler = st.checkbox('Run Profiler')
-if profiler:
-    st.write('Running Profiler:')
-    st.write(df_bs.describe())
-    pr = ProfileReport(df_bs, title="Profiling Report")
-    st_profile_report(pr)
+    st.divider()
 
+    profiler = st.checkbox('Run Profiler')
+    if profiler:
+        st.write('Running Profiler:')
+        st.write(df_bs.describe())
+        pr = ProfileReport(df_bs, title="Profiling Report")
+        st_profile_report(pr)
+
+elif select_option == 'Summaries':
+    root_dir = os.getcwd()
+    st.write(root_dir)
+    st.header('EDA App for exploring ColORAN Dataset:')
+    run = 'rome_static_medium'
+    os.chdir(run)
+    sched_list = natsorted(os.listdir())
+    os.chdir(sched_list[1])
+    train_list = natsorted(os.listdir())
+    os.chdir(train_list[1])
+    exp_list = natsorted(os.listdir())
+    os.chdir(exp_list[1])
+    bs_list = natsorted(os.listdir())
+    os.chdir(root_dir)
+
+
+    st.write(bs_list, exp_list, train_list, sched_list)
+
+sep = os.path.sep
+bs_combo_df = pd.DataFrame()
+sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
+for s in sched_list:
+    tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
+    for t in tr_list:
+        exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
+        for e in exp_list:
+            bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
+            for b in bs_list:
+                file_name = b.split(sep)[-1]
+                df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
+                sep = os.path.sep
+                df_temp['base_station'] = b
+                df_temp['exp'] = e
+                df_temp['training'] = t
+                df_temp['sched'] = s
+                bs_combo_df = pd.concat([bs_combo_df, df_temp])
+bs_combo_df.to_csv('bs_combo_df.csv')
+
+st.download_button(
+    label="Download data as CSV",
+    data=bs_combo_df,
+    file_name="bs_combo_df.csv",
+    mime="text/csv",
+)
