@@ -136,29 +136,29 @@ elif select_option == 'Summaries':
 
     st.write(bs_list, exp_list, train_list, sched_list)
 
-sep = os.path.sep
-bs_combo_df = pd.DataFrame()
-sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
-for s in sched_list:
-    tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
-    for t in tr_list:
-        exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
-        for e in exp_list:
-            bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
-            for b in bs_list:
-                file_name = b.split(sep)[-1]
-                df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
-                sep = os.path.sep
-                df_temp['base_station'] = b
-                df_temp['exp'] = e
-                df_temp['training'] = t
-                df_temp['sched'] = s
-                bs_combo_df = pd.concat([bs_combo_df, df_temp])
-bs_combo_df.to_csv('bs_combo_df.csv')
+    sep = os.path.sep
+    bs_combo_df = pd.DataFrame()
+    sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
+    for s in sched_list:
+        tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
+        for t in tr_list:
+            exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
+            for e in exp_list:
+                bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
+                for b in bs_list:
+                    file_name = b.split(sep)[-1]
+                    df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
+                    sep = os.path.sep
+                    df_temp['base_station'] = b
+                    df_temp['exp'] = e
+                    df_temp['training'] = t
+                    df_temp['sched'] = s
+                    bs_combo_df = pd.concat([bs_combo_df, df_temp])
+    bs_combo_df.to_csv('bs_combo_df.csv')
 
-st.download_button(
-    label="Download data as CSV",
-    data=bs_combo_df,
-    file_name="bs_combo_df.csv",
-    mime="text/csv",
-)
+    st.download_button(
+        label="Download data as CSV",
+        data=bs_combo_df,
+        file_name="bs_combo_df.csv",
+        mime="text/csv",
+    )
