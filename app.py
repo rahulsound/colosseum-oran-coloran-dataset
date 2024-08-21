@@ -46,6 +46,10 @@ This work was partially supported by the U.S. National Science Foundation under 
 -   Details [here](https://github.com/rahulsound/colosseum-oran-coloran-dataset/edit/master/README.md)
         ''')
       
+@st.cache_data
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode("utf-8")
 
 ###################
 
@@ -156,9 +160,11 @@ elif select_option == 'Summaries':
                     bs_combo_df = pd.concat([bs_combo_df, df_temp])
     bs_combo_df.to_csv('bs_combo_df.csv')
 
-    st.download_button(
-        label="Download data as CSV",
-        data=bs_combo_df,
-        file_name="bs_combo_df.csv",
-        mime="text/csv",
-    )
+csv = convert_df(bs_combo_df)
+
+st.download_button(
+    label="Download data as CSV",
+    data=csv,
+    file_name="large_df.csv",
+    mime="text/csv",
+)
