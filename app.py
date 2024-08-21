@@ -81,7 +81,8 @@ df_combo_ue = pd.DataFrame()
 #append all files together
 for file in all_files:
             df_temp = pd.read_csv(file)
-            df_temp['ue_id'] = file.split('.')[0].split('\\')[-1]
+            sep = os.path.sep
+            df_temp['ue_id'] = file.split('.')[0].split(sep)[-1]
             df_combo_ue = pd.concat([df_combo_ue, df_temp])
 
 #Write-up:
