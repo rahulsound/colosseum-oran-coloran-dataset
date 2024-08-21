@@ -101,6 +101,10 @@ with col3:
 fig = px.scatter(data_frame=df_combo_ue, x=num_selection1, y=num_selection2, color=cat_selection)
 st.plotly_chart(fig) 
 
+st.divider()
+st.write(df_combo_ue['ue_id'].head())
+st.divider()
+
 profiler = st.checkbox('Run Profiler')
 if profiler:
     st.write('Running Profiler:')
