@@ -160,11 +160,11 @@ elif select_option == 'Summaries':
                     bs_combo_df = pd.concat([bs_combo_df, df_temp])
     bs_combo_df.to_csv('bs_combo_df.csv')
 
-csv = convert_df(bs_combo_df)
+    csv = convert_df(bs_combo_df)
 
-st.download_button(
-    label="Download data as CSV",
-    data=csv,
-    file_name="large_df.csv",
-    mime="text/csv",
-)
+    st.download_button(
+        label="Download data as CSV",
+        data=csv,
+        file_name="large_df.csv",
+        mime="text/csv",
+    )
