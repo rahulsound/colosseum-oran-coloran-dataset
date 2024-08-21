@@ -137,34 +137,46 @@ elif select_option == 'Summaries':
     bs_list = natsorted(os.listdir())
     os.chdir(root_dir)
 
+    bs_summary = st.checkbox('Prepare summaries of all base stations?')
+    if bs_summary:
+        with st.spinner(text="In progress..."):
+            sep = os.path.sep
+            bs_combo_df = pd.DataFrame()
+            sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
+            for s in sched_list:
+                tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
+                for t in tr_list:
+                    exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
+                    for e in exp_list:
+                        bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
+                        for b in bs_list:
+                            file_name = b.split(sep)[-1]
+                            df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
+                            sep = os.path.sep
+                            df_temp['base_station'] = b.split(sep)[-1]
+                            df_temp['exp'] = e.split(sep)[-1]
+                            df_temp['training'] = t.split(sep)[-1]
+                            df_temp['sched'] = s.split(sep)[-1]
+                            bs_combo_df = pd.concat([bs_combo_df, df_temp])
+            bs_combo_df.to_csv('bs_combo_df.csv')
 
-    st.write(bs_list, exp_list, train_list, sched_list)
+            csv = convert_df(bs_combo_df)
 
-    sep = os.path.sep
-    bs_combo_df = pd.DataFrame()
-    sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
-    for s in sched_list:
-        tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
-        for t in tr_list[0:1]:
-            exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
-            for e in exp_list[0:1]:
-                bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
-                for b in bs_list[0:1]:
-                    file_name = b.split(sep)[-1]
-                    df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
-                    sep = os.path.sep
-                    df_temp['base_station'] = b.split(sep)[-1]
-                    df_temp['exp'] = e.split(sep)[-1]
-                    df_temp['training'] = t.split(sep)[-1]
-                    df_temp['sched'] = s.split(sep)[-1]
-                    bs_combo_df = pd.concat([bs_combo_df, df_temp])
-    bs_combo_df.to_csv('bs_combo_df.csv')
+            st.download_button(
+                label="Download data as CSV",
+                data=csv,
+                file_name="base_station_all.csv",
+                mime="text/csv",
+            )
+        #Plots:1.
+        num_cols = bs_combo_df.columns
+        col1, col2, col3 = st.columns(3)
 
-    csv = convert_df(bs_combo_df)
-
-    st.download_button(
-        label="Download data as CSV",
-        data=csv,
-        file_name="large_df.csv",
-        mime="text/csv",
-    )
+        with col1:
+            num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols, index=2)
+        with col2:
+            num_selection2 = st.selectbox("Select y axis to plot fig1:", num_cols, index=3)     
+        with col3:
+            cat_selection = st.selectbox("Select criterion to plot fig1:",num_cols, index=7)
+        fig = px.scatter(data_frame=bs_combo_df, x=num_selection1, y=num_selection2, color=cat_selection)
+        st.plotly_chart(fig) 
