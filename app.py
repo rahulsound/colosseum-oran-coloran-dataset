@@ -93,6 +93,9 @@ st.divider()
 #Plots:1.
 num_cols = df_combo_ue.columns
 col1, col2, col3 = st.columns(3)
+num_selection1 = 'ul_mcs'
+num_selection2 = 'ul_brate'
+cat_selection  = 'ue_id'
 with col1:
     num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols)
 with col2:
@@ -102,8 +105,6 @@ with col3:
 fig = px.scatter(data_frame=df_combo_ue, x=num_selection1, y=num_selection2, color=cat_selection)
 st.plotly_chart(fig) 
 
-st.divider()
-st.write(df_combo_ue['ue_id'].head())
 st.divider()
 
 profiler = st.checkbox('Run Profiler')
