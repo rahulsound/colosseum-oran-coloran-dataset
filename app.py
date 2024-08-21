@@ -124,7 +124,7 @@ elif select_option == 'Individual Runs':
 
 elif select_option == 'Summaries':
     root_dir = os.getcwd()
-    st.write(root_dir)
+    # st.write(root_dir)
     st.header('EDA App for exploring ColORAN Dataset:')
     run = 'rome_static_medium'
     os.chdir(run)
@@ -139,44 +139,47 @@ elif select_option == 'Summaries':
 
     bs_summary = st.checkbox('Prepare summaries of all base stations?')
     if bs_summary:
-        with st.spinner(text="In progress..."):
-            sep = os.path.sep
-            bs_combo_df = pd.DataFrame()
-            sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
-            for s in sched_list:
-                tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
-                for t in tr_list:
-                    exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
-                    for e in exp_list:
-                        bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
-                        for b in bs_list:
-                            file_name = b.split(sep)[-1]
-                            df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
-                            sep = os.path.sep
-                            df_temp['base_station'] = b.split(sep)[-1]
-                            df_temp['exp'] = e.split(sep)[-1]
-                            df_temp['training'] = t.split(sep)[-1]
-                            df_temp['sched'] = s.split(sep)[-1]
-                            bs_combo_df = pd.concat([bs_combo_df, df_temp])
-            bs_combo_df.to_csv('bs_combo_df.csv')
+         st.write('File size too large for summarizing...')
+        # with st.spinner(text="In progress..."):
+            # sep = os.path.sep
+            # bs_combo_df = pd.DataFrame()
+            # sched_list = natsorted(glob.glob(os.path.join((run),'sched*')))
+            # for s in sched_list:
+            #     tr_list = natsorted(glob.glob(os.path.join((s), 'tr*')))
+            #     for t in tr_list:
+            #         exp_list = natsorted(glob.glob(os.path.join((t), 'exp*')))
+            #         for e in exp_list:
+            #             st.write('Starting: ', s.split(sep)[-1], t.split(sep)[-1], e.split(sep)[-1] )
+            #             bs_list = natsorted(glob.glob(os.path.join((e), 'bs*')))
+            #             for b in bs_list:
+            #                 file_name = b.split(sep)[-1]
+            #                 df_temp = pd.read_csv(b+ os.path.sep + file_name + '.csv')
+            #                 sep = os.path.sep
+            #                 df_temp['base_station'] = b.split(sep)[-1]
+            #                 df_temp['exp'] = e.split(sep)[-1]
+            #                 df_temp['training'] = t.split(sep)[-1]
+            #                 df_temp['sched'] = s.split(sep)[-1]
+            #                 bs_combo_df = pd.concat([bs_combo_df, df_temp])
+            # bs_combo_df.to_csv('bs_combo_df.csv')
 
-            csv = convert_df(bs_combo_df)
+            # csv = convert_df(bs_combo_df)
 
-            st.download_button(
-                label="Download data as CSV",
-                data=csv,
-                file_name="base_station_all.csv",
-                mime="text/csv",
-            )
+            # st.download_button(
+            #     label="Download data as CSV",
+            #     data=csv,
+            #     file_name="base_station_all.csv",
+            #     mime="text/csv",
+            # )
         #Plots:1.
-        num_cols = bs_combo_df.columns
-        col1, col2, col3 = st.columns(3)
+        # bs_combo_df = pd.read_csv('bs_combo_df.csv')
+        # num_cols = bs_combo_df.columns
+        # col1, col2, col3 = st.columns(3)
 
-        with col1:
-            num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols, index=2)
-        with col2:
-            num_selection2 = st.selectbox("Select y axis to plot fig1:", num_cols, index=3)     
-        with col3:
-            cat_selection = st.selectbox("Select criterion to plot fig1:",num_cols, index=7)
-        fig = px.scatter(data_frame=bs_combo_df, x=num_selection1, y=num_selection2, color=cat_selection)
-        st.plotly_chart(fig) 
+        # with col1:
+        #     num_selection1 = st.selectbox("Select x axis to plot fig1:", num_cols, index=2)
+        # with col2:
+        #     num_selection2 = st.selectbox("Select y axis to plot fig1:", num_cols, index=3)     
+        # with col3:
+        #     cat_selection = st.selectbox("Select criterion to plot fig1:",num_cols, index=7)
+        # fig = px.scatter(data_frame=bs_combo_df, x=num_selection1, y=num_selection2, color=cat_selection)
+        # st.plotly_chart(fig) 
